@@ -1,0 +1,8 @@
+{
+  "name": "cloudmart-frontend",
+  "version": "1.0.0",
+  "description": "Static frontend for CSP451 CloudMart milestone",
+  "scripts": {
+    "start": "echo \"Use Dockerfile with Nginx to serve static files\""
+  }
+}
