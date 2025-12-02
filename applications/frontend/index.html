@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CloudMart</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header>
+    <h1>CloudMart</h1>
+    <p>Simple demo e-commerce powered by FastAPI + Cosmos DB + Azure</p>
+  </header>
+
+  <main>
+    <section id="filters">
+      <label for="categorySelect">Filter by category:</label>
+      <select id="categorySelect">
+        <option value="">All</option>
+      </select>
+    </section>
+
+    <section id="products">
+      <h2>Products</h2>
+      <div id="productList" class="grid"></div>
+    </section>
+
+    <section id="cart">
+      <h2>Shopping Cart</h2>
+      <div id="cartItems"></div>
+      <p id="cartTotal"></p>
+      <button id="checkoutBtn">Place Order</button>
+      <p id="orderStatus"></p>
+    </section>
+  </main>
+
+  <footer>
+    <small>CloudMart • CSP451 Milestone 3</small>
+  </footer>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
