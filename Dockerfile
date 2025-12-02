@@ -14,8 +14,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy backend code
 COPY applications/backend/app ./app
 
-# Copy frontend static files
-COPY frontend_static ./frontend_static
+# Copy frontend static files (from applications/frontend/src)
+COPY applications/frontend/src ./frontend_static
 
 # Env vars (DB name default)
 ENV COSMOS_DB_NAME=cloudmart
