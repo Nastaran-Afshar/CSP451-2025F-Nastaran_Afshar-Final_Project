@@ -1,0 +1,56 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      run: |
+        IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/cloudmart-api
+        docker build -t $IMAGE_NAME:latest .
+        docker push $IMAGE_NAME:latest
+
+    - name: Azure login
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy to Azure Container Instances
+      run: |
+        RG_NAME=Student-RG-1900923       
+        ACI_NAME=cloudmart-app-nmohammadiafshar-154075238            # or your chosen name
+        DNS_LABEL=cloudmart-nmohammadiafshar      # unique, all lowercase
+        IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/cloudmart-api:latest
+
+        # delete existing container if it exists
+        az container delete \
+          --resource-group $RG_NAME \
+          --name $ACI_NAME \
+          --yes --no-wait || echo "No existing container to delete"
+
+        az container create \
+          --resource-group $RG_NAME \
+          --name $ACI_NAME \
+          --image $IMAGE_NAME \
+          --dns-name-label $DNS_LABEL \
+          --ports 80 \
+          --location canadaeast \
+          --environment-variables \
+            COSMOS_ENDPOINT="${{ secrets.COSMOS_ENDPOINT }}" \
+            COSMOS_KEY="${{ secrets.COSMOS_KEY }}" \
+            COSMOS_DB_NAME="cloudmart" \
+          --restart-policy Always
