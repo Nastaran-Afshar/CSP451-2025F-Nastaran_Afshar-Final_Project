@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  cloudmart-api:
+    build: ..
+    ports:
+      - "8000:80"
+    environment:
+      - COSMOS_ENDPOINT=${COSMOS_ENDPOINT}
+      - COSMOS_KEY=${COSMOS_KEY}
+      - COSMOS_DB_NAME=cloudmart
