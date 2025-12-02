@@ -31,9 +31,9 @@ app.add_middleware(
 
 # ---------- Static frontend files ----------
 
-STATIC_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "..", "frontend_static")
-# We'll mount ./frontend_static in Docker; you’ll create it later.
-
+STATIC_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "src")
+)
 
 if not os.path.exists(STATIC_DIR):
     os.makedirs(STATIC_DIR, exist_ok=True)
