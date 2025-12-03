@@ -17,7 +17,7 @@ if not COSMOS_ENDPOINT or not COSMOS_KEY or COSMOS_ENDPOINT == "..." or COSMOS_K
 
 # Create client & database if they don't exist
 _client = CosmosClient(COSMOS_ENDPOINT, credential=COSMOS_KEY)
-_database = _client.create_database_if_not_exists(id=COSMOS_DB_NAME)
+_database = _client.create_database_if_not_exists(id=cloudmart)
 
 
 # --------- Container helpers ---------
