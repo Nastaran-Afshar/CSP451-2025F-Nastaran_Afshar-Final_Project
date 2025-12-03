@@ -55,4 +55,4 @@ jobs:
     #        COSMOS_KEY="${{ secrets.COSMOS_KEY }}" \
      #       COSMOS_DB_NAME="cloudmart" \
       #    --restart-policy Always
-      #test
+      #test2
