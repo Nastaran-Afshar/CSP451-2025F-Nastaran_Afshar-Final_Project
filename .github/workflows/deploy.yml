@@ -24,10 +24,10 @@ jobs:
         docker build -t $IMAGE_NAME:latest .
         docker push $IMAGE_NAME:latest
 
-    - name: Azure login
-      uses: azure/login@v2
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+#    - name: Azure login
+#      uses: azure/login@v2
+ #     with:
+  #      creds: ${{ secrets.AZURE_CREDENTIALS }}
 
 #    - name: Deploy to Azure Container Instances
  #     run: 
