@@ -1,6 +1,6 @@
 import os
 from typing import Any, Dict, List
-from ~/docker/docker-compose.yml import COSMOS_DB_NAME, COSMOS_KEY, COSMOS_ENDPOINT
+from /docker/docker-compose.yml import COSMOS_DB_NAME, COSMOS_KEY, COSMOS_ENDPOINT
 
 from azure.cosmos import CosmosClient, PartitionKey
 
