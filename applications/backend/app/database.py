@@ -4,28 +4,32 @@ from typing import Any, Dict, List
 from azure.cosmos import CosmosClient, PartitionKey
 
 
+# --------- Config from environment ---------
+
 COSMOS_ENDPOINT = os.getenv("COSMOS_ENDPOINT")
 COSMOS_KEY = os.getenv("COSMOS_KEY")
 COSMOS_DB_NAME = os.getenv("COSMOS_DB_NAME", "cloudmart")
 
-# Validate env vars early and clearly
 if not COSMOS_ENDPOINT or not COSMOS_KEY or COSMOS_ENDPOINT == "..." or COSMOS_KEY == "...":
     raise RuntimeError(
         "COSMOS_ENDPOINT and COSMOS_KEY environment variables must be set to valid values "
         "and must not be '...'."
     )
 
-# Create client and database (if not exists)
+# Create client & database if they don't exist
 _client = CosmosClient(COSMOS_ENDPOINT, credential=COSMOS_KEY)
 _database = _client.create_database_if_not_exists(id=COSMOS_DB_NAME)
 
 
+# --------- Container helpers ---------
+
 def get_container(name: str):
     """
     Returns a Cosmos DB container object, creating it if not exists.
-    products:   partition key = /category
-    cart:       partition key = /user_id
-    orders:     partition key = /user_id
+
+    products: partition key = /category
+    cart:     partition key = /user_id
+    orders:   partition key = /user_id
     """
     if name == "products":
         pk = PartitionKey(path="/category")
@@ -37,21 +41,19 @@ def get_container(name: str):
 
 def _seed_products_if_empty() -> None:
     """
-    Seed the products container with sample data if it is empty.
-    This gives you immediate data for:
-      /api/v1/products
-      /api/v1/categories
-      frontend listing & filter
+    Seed the products container with sample data if the container is empty.
     """
     container = get_container("products")
     # Check if there are any items at all
     items = list(
         container.query_items(
-            query="SELECT TOP 1 * FROM c", enable_cross_partition_query=True
+            query="SELECT TOP 1 * FROM c",
+            enable_cross_partition_query=True,
         )
     )
     if items:
-        return  # already has data
+        # Already seeded, nothing to do
+        return
 
     sample_products = [
         {"id": "1", "name": "Laptop", "category": "Electronics", "price": 1299.99},
@@ -63,9 +65,26 @@ def _seed_products_if_empty() -> None:
         container.upsert_item(p)
 
 
-# Run seeding at import time (once per container start)
-_seed_products_if_empty()
+def _initialize_db() -> None:
+    """
+    Ensure all required containers exist and seed products.
 
+    After this runs you will see in Data Explorer:
+      - products  (pk: /category)
+      - cart      (pk: /user_id)
+      - orders    (pk: /user_id)
+    """
+    get_container("products")
+    get_container("cart")
+    get_container("orders")
+    _seed_products_if_empty()
+
+
+# Run initialization once when the module is imported
+_initialize_db()
+
+
+# --------- Public CRUD functions used by main.py ---------
 
 def list_items(container_name: str, query: str) -> List[Dict[str, Any]]:
     container = get_container(container_name)
