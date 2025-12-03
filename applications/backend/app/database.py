@@ -1,14 +1,12 @@
 import os
 from typing import Any, Dict, List
-from docker-compose.yml import COSMOS_DB_NAME, COSMOS_KEY, COSMOS_ENDPOINT
-
 from azure.cosmos import CosmosClient, PartitionKey
 
 
 # --------- Config from environment ---------
 
-COSMOS_ENDPOINT = os.getenv("COSMOS_ENDPOINT")
-COSMOS_KEY = os.getenv("COSMOS_KEY")
+COSMOS_ENDPOINT = os.getenv("https://cloudmart-db-nmohammadiafshar.documents.azure.com:443/")
+COSMOS_KEY = os.getenv("D3wbRpOZsfObmCqnrRljdaelGv4J9CTDhIOAfAfzKwbxhCflrKGfCnBnd6LGHcjC2DwmTNK2KGZ9ACDbgUYJNw==")
 COSMOS_DB_NAME = os.getenv("COSMOS_DB_NAME", "cloudmart")
 
 if not COSMOS_ENDPOINT or not COSMOS_KEY or COSMOS_ENDPOINT == "..." or COSMOS_KEY == "...":
