@@ -6,6 +6,6 @@ services:
     ports:
       - "8000:80"
     environment:
-      - COSMOS_ENDPOINT=${COSMOS_ENDPOINT}
-      - COSMOS_KEY=${COSMOS_KEY}
+      - COSMOS_ENDPOINT=${https://cloudmart-db-nmohammadiafshar.documents.azure.com:443/}
+      - COSMOS_KEY=${D3wbRpOZsfObmCqnrRljdaelGv4J9CTDhIOAfAfzKwbxhCflrKGfCnBnd6LGHcjC2DwmTNK2KGZ9ACDbgUYJNw==}
       - COSMOS_DB_NAME=cloudmart
