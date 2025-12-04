@@ -17,9 +17,18 @@ COPY applications/backend/app ./app
 # Copy frontend static files (from applications/frontend/src)
 COPY applications/frontend/src ./frontend_static
 
+# 🔐 Copy TLS certs into the image
+COPY certs /certs
+
 # Env vars (DB name default)
 ENV COSMOS_DB_NAME=cloudmart
 
-EXPOSE 80
+# Expose HTTP + HTTPS (we actually use 443)
+EXPOSE 80 443
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+# Run FastAPI with HTTPS on port 443
+CMD ["uvicorn", "app.main:app", \
+     "--host", "0.0.0.0", \
+     "--port", "443", \
+     "--ssl-keyfile", "/certs/privkey.pem", \
+     "--ssl-certfile", "/certs/fullchain.pem"]
